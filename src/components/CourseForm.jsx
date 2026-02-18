@@ -1,34 +1,27 @@
-import { useState } from 'react';
-
-import useCourseStore from '../app/courseStore'
+import { useState } from "react";
+import useCourseStore from "../app/courseStore";
 
 const CourseForm = () => {
+  const addCourse = useCourseStore((s) => s.addCourse);
+  const [title, setTitle] = useState("");
 
-    const addCourse = useCourseStore((state) => state.addCourse);
+  const submit = () => {
+    if (!title.trim()) return alert("Add a title");
 
-    const [courseTitle, setCourseTitle] = useState("")
-
-    console.log("course form")
-
-    const handleCourseSubmit = () =>{
-        if(!courseTitle){
-            return alert("Please add a course title.")
-            addCourse({
-                id: Math.ceil(Math.random() * 1000000),
-                title: courseTitle,
-            })
-        }
-    }
+    addCourse({ id: Date.now(), title, completed: false });
+    setTitle("");
+  };
 
   return (
-  <div className='form-container'>
-    <input type="text" className='form-input' value={courseTitle} onChange={(e) => {
-        setCourseTitle(e.target.value)
-    }} />
+    <div className="form-container">
+      <input
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Add new course"
+      />
+      <button onClick={submit}>Add</button>
+    </div>
+  );
+};
 
-    <button className="form-submit-btn" onClick={() =>{ handleCourseSubmit()}}>Add Course</button>
-  </div>
-  )
-}
-
-export default CourseForm
+export default CourseForm;
